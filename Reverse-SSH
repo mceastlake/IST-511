@@ -1,6 +1,6 @@
 Connect Pi to Cyber122
--ssh-keygen
--cat ~/.ssh/id_rsa.pub
+command: ssh-keygen
+command: cat ~/.ssh/id_rsa.pub
 Copy the key output from start to finish. 
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDc5W21i1B1422wfOf5p/3vhBD5QdKBKzG5i5RYllRnbXF0FocF6Fxy0yvIJ0ycoOaUGUgH2P7ZRtzY2pxG33i66hpn+as14JfzLyfeNJI03gG73f3zwv472cZc09EGooq9GBHoJGVtRpKqdNd1XuCFle1QPjlK+xRr4FYJAiSNiCPbBcFP89hWCU2sp8gUwl+2au2moexahSDh51P1jwCkZT1rK+HeM7PlLDwSvMaawVMAU2IzKiHae4A61I2+NAd1ojLC9H7TWyV/BJTLIGEyPSC665TJLzcoG4Xnwi34T pi@raspberrypi
 
@@ -9,9 +9,9 @@ Under COMPUTER ENGINE find metadata and enter the ssh keys tabs.
 -paste your public key and save.
 Via the web interface, ssh into your GCP instance. (Instance CLI)
 Change the SSH server to accept SSH connects over port 443.
--sudo nano /etc/ssh/sshd_config
+command: sudo nano /etc/ssh/sshd_config
 -Add "Port 443" above #Port 22. Save file and exit nano.
--sudo service ssh restart
+command: sudo service ssh restart
 Keep this Instance CLI window open
 
 Inside GCP web interface, shutdown your instance. 
@@ -19,13 +19,13 @@ Edit the GCP instance to have a static address, and accept https connections(aut
 
 In Raspberry Pi.
 Test the simple ssh connection. 
--ssh -i ~/.ssh/id_rsa -p 443 pi@(external ip address of your instance on GCP)
+command: ssh -i ~/.ssh/id_rsa -p 443 pi@(external ip address of your instance on GCP)
 Did it work?
 
 Test a simple reverse ssh connection
--ssh -i ~/.ssh/id_rsa -p 443 -R 2210:localhost:22 pi@(external ip address of your instance on GCP)
+command: ssh -i ~/.ssh/id_rsa -p 443 -R 2210:localhost:22 pi@(external ip address of your instance on GCP)
 Inside the Instance CLI
--ssh -p 2210 pi@localhost
+command: ssh -p 2210 pi@localhost
 It should ask for your password to the pi. Check to make sure it made the reverse connection.
 -exit the reverse ssh connection.
 
@@ -35,9 +35,9 @@ Now, setup your pi to automatically make the connection upon restart and then to
 
 Create a script
 In this case, I'm store it in /bin/
--sudo touch /bin/my_autossh
--sudo chmod +x /bin/my_autossh
--sudo nano /bin/my_autossh
+command: sudo touch /bin/my_autossh
+command: sudo chmod +x /bin/my_autossh
+command: sudo nano /bin/my_autossh
 #!/bin/bash
 SSH_COMMAND="ssh -i ~/.ssh/id_rsa -fNT -R 2210:localhost:22 -p 443 pi@(external ip address of your instance on GCP)"
 
@@ -47,6 +47,8 @@ fi
 - save and exit
 
 Crontab schedules tasks.
--crontab -e
-@reboot sleep 60 && -ssh -i ~/.ssh/id_rsa -p 443 -fNT -R 2210:localhost:22 pi@(external ip address of your instance on GCP)
+command: crontab -e
+Accept the text editor you are comfortable with.
+Add this to the bottom of the file:
+@reboot sleep 60 && /bin/my_autossh
 */1 * * * * /bin/my_autossh
