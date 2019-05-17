@@ -1,8 +1,10 @@
-Connect Pi to Cyber122
+Our school network won't let you ssh over port 22. We need to work around that.
+
+I tested this on cyber122, I assume it works on Eduroam.
 command: ssh-keygen
 command: cat ~/.ssh/id_rsa.pub
 Copy the key output from start to finish. 
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDc5W21i1B1422wfOf5p/3vhBD5QdKBKzG5i5RYllRnbXF0FocF6Fxy0yvIJ0ycoOaUGUgH2P7ZRtzY2pxG33i66hpn+as14JfzLyfeNJI03gG73f3zwv472cZc09EGooq9GBHoJGVtRpKqdNd1XuCFle1QPjlK+xRr4FYJAiSNiCPbBcFP89hWCU2sp8gUwl+2au2moexahSDh51P1jwCkZT1rK+HeM7PlLDwSvMaawVMAU2IzKiHae4A61I2+NAd1ojLC9H7TWyV/BJTLIGEyPSC665TJLzcoG4Xnwi34T pi@raspberrypi
+It will look like "ssh-rsa AAAAB3NzaC1yc2EAAAADAQA3h51P1jBJTLIGEyPSC665TJLzcoG4Xnwi34T pi@raspberrypi", but longer.
 
 Access GCP Platform in your Pi browser.
 Under COMPUTER ENGINE find metadata and enter the ssh keys tabs.
